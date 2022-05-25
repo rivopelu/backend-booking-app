@@ -8,6 +8,7 @@ import roomsRoutes from './src/routes/roomsRoutes.js';
 import userRoutes from './src/routes/usersRoutes.js';
 const app = express();
 
+
 const connect = async () => {
     try {
         await mongoose.connect(process.env.MONGO_URI)
@@ -26,16 +27,27 @@ mongoose.connection.on('connected', () => {
 })
 
 
+
+
+
 app.use(express.json())
 
+app.use('/api/auth', authRoutes);
+app.use('/api/hotels', hotelsRoutes);
+app.use('/api/user', userRoutes);
+app.use('/api/room', roomsRoutes);
 
 
-
-app.use(' /api/auth', authRoutes);
-app.use(' /api/hotels', hotelsRoutes);
-app.use(' /api/user', userRoutes);
-app.use(' /api/room', roomsRoutes);
-
+app.use((error, req, res, next) => {
+    const errorStatus = error.status || 500
+    const errorMessage = error.message || 'something wrong'
+    return res.status(errorStatus).json({
+        success: false,
+        status: errorStatus,
+        message: errorMessage,
+        stack: error.stack
+    })
+})
 
 
 app.listen(process.env.PORT, () => {
