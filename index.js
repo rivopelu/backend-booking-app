@@ -6,6 +6,7 @@ import authRoutes from './src/routes/authRoutes.js';
 import hotelsRoutes from './src/routes/hotelsRoutes.js';
 import roomsRoutes from './src/routes/roomsRoutes.js';
 import userRoutes from './src/routes/usersRoutes.js';
+import cookieParser from 'cookie-parser';
 const app = express();
 
 
@@ -28,10 +29,12 @@ mongoose.connection.on('connected', () => {
 
 
 
-
-
+//MIDDLEWARE
+app.use(cookieParser())
 app.use(express.json())
 
+
+//ROUTES
 app.use('/api/auth', authRoutes);
 app.use('/api/hotels', hotelsRoutes);
 app.use('/api/user', userRoutes);
