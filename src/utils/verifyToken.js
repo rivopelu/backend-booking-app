@@ -17,8 +17,17 @@ export const verifyToken = async (req, res, next) => {
 
 
 export const verifyUser = (req, res, next) => {
-    verifyToken(req, res, () => {
+    verifyToken(req, res, next, () => {
         if (req.user.id === req.params.id || req.user.isAdmin) {
+            next()
+        } else {
+            if (err) return next(createError(403, 'akses di tolak'))
+        }
+    })
+}
+export const verifyAdmin = (req, res, next) => {
+    verifyToken(req, res, next, () => {
+        if (req.user.isAdmin) {
             next()
         } else {
             if (err) return next(createError(403, 'akses di tolak'))
